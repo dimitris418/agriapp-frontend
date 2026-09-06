@@ -14,7 +14,13 @@
         <form [formGroup]="form" (ngSubmit)="submit()" class="form">
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="username" autocomplete="username" />
+            <input
+              matInput
+              type="email"
+              formControlName="username"
+              autocomplete="username"
+              placeholder="onoma@example.com"
+            />
             @if (form.controls.username.hasError('required')) {
               <mat-error>Το email είναι υποχρεωτικό</mat-error>
             } @else if (form.controls.username.hasError('email')) {

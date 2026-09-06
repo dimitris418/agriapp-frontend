@@ -16,7 +16,12 @@
             <div class="col-12 col-sm-6">
               <mat-form-field appearance="outline">
                 <mat-label>Όνομα</mat-label>
-                <input matInput formControlName="firstname" autocomplete="given-name" />
+                <input
+                  matInput
+                  formControlName="firstname"
+                  autocomplete="given-name"
+                  placeholder="Γιώργος"
+                />
                 @if (form.controls.firstname.hasError('server')) {
                   <mat-error>{{ form.controls.firstname.getError('server') }}</mat-error>
                 } @else if (form.controls.firstname.hasError('required')) {
@@ -30,7 +35,12 @@
             <div class="col-12 col-sm-6">
               <mat-form-field appearance="outline">
                 <mat-label>Επώνυμο</mat-label>
-                <input matInput formControlName="lastname" autocomplete="family-name" />
+                <input
+                  matInput
+                  formControlName="lastname"
+                  autocomplete="family-name"
+                  placeholder="Παπαδόπουλος"
+                />
                 @if (form.controls.lastname.hasError('server')) {
                   <mat-error>{{ form.controls.lastname.getError('server') }}</mat-error>
                 } @else if (form.controls.lastname.hasError('required')) {
@@ -44,7 +54,13 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="username" autocomplete="email" />
+            <input
+              matInput
+              type="email"
+              formControlName="username"
+              autocomplete="email"
+              placeholder="onoma@example.com"
+            />
             @if (form.controls.username.hasError('server')) {
               <mat-error>{{ form.controls.username.getError('server') }}</mat-error>
             } @else if (form.controls.username.hasError('required')) {
@@ -102,7 +118,13 @@
             <div class="col-12 col-sm-4">
               <mat-form-field appearance="outline">
                 <mat-label>ΑΦΜ</mat-label>
-                <input matInput formControlName="vat" inputmode="numeric" maxlength="9" />
+                <input
+                  matInput
+                  formControlName="vat"
+                  inputmode="numeric"
+                  maxlength="9"
+                  placeholder="123456789"
+                />
                 @if (form.controls.vat.hasError('server')) {
                   <mat-error>{{ form.controls.vat.getError('server') }}</mat-error>
                 } @else if (form.controls.vat.hasError('required')) {
@@ -116,7 +138,12 @@
             <div class="col-12 col-sm-4">
               <mat-form-field appearance="outline">
                 <mat-label>Αρ. μητρώου</mat-label>
-                <input matInput formControlName="registryNumber" inputmode="numeric" />
+                <input
+                  matInput
+                  formControlName="registryNumber"
+                  inputmode="numeric"
+                  placeholder="123456"
+                />
                 @if (form.controls.registryNumber.invalid) {
                   <mat-error>Μόνο ψηφία</mat-error>
                 }
@@ -127,7 +154,13 @@
             <div class="col-12 col-sm-4">
               <mat-form-field appearance="outline">
                 <mat-label>Τηλέφωνο</mat-label>
-                <input matInput formControlName="phone" inputmode="tel" maxlength="10" />
+                <input
+                  matInput
+                  formControlName="phone"
+                  inputmode="tel"
+                  maxlength="10"
+                  placeholder="6912345678"
+                />
                 @if (form.controls.phone.invalid) {
                   <mat-error>Δέκα ψηφία</mat-error>
                 }
