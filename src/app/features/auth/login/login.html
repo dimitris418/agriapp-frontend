@@ -1,0 +1,63 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-6 col-lg-4">
+    <mat-card>
+      @if (submitting()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+
+      <mat-card-header>
+        <mat-card-title>Σύνδεση</mat-card-title>
+        <mat-card-subtitle>Ημερολόγιο Αγρού</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="username" autocomplete="username" />
+            @if (form.controls.username.hasError('required')) {
+              <mat-error>Το email είναι υποχρεωτικό</mat-error>
+            } @else if (form.controls.username.hasError('email')) {
+              <mat-error>Μη έγκυρη διεύθυνση email</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Κωδικός</mat-label>
+            <input
+              matInput
+              [type]="hidePassword() ? 'password' : 'text'"
+              formControlName="password"
+              autocomplete="current-password"
+            />
+            <button
+              matIconButton
+              type="button"
+              matSuffix
+              (click)="hidePassword.set(!hidePassword())"
+              [attr.aria-label]="hidePassword() ? 'Εμφάνιση κωδικού' : 'Απόκρυψη κωδικού'"
+            >
+              <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (form.controls.password.hasError('required')) {
+              <mat-error>Ο κωδικός είναι υποχρεωτικός</mat-error>
+            }
+          </mat-form-field>
+
+          @if (errorMessage(); as message) {
+            <p class="error" role="alert">{{ message }}</p>
+          }
+
+          <button matButton="filled" type="submit" [disabled]="form.invalid || submitting()">
+            Σύνδεση
+          </button>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <span>Δεν έχετε λογαριασμό;</span>
+        <a matButton routerLink="/register">Εγγραφή</a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
