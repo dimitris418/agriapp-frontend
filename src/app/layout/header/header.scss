@@ -1,4 +1,8 @@
 .header {
+  // Το color="primary" του Material 2 δεν ισχύει στο Material 3· το χρώμα
+  // έρχεται από τις μεταβλητές που παράγει το mat.theme().
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
   gap: 1.5rem;
   position: sticky;
   top: 0;
