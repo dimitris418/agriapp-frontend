@@ -1,0 +1,72 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <mat-card>
+      @if (loading() || submitting()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+
+      <mat-card-header>
+        <mat-card-title>{{ editing ? 'Επεξεργασία αγροτεμαχίου' : 'Νέο αγροτεμάχιο' }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+          <mat-form-field appearance="outline">
+            <mat-label>Ονομασία</mat-label>
+            <input matInput formControlName="name" placeholder="Κάτω χωράφι" />
+            @if (form.controls.name.hasError('server')) {
+              <mat-error>{{ form.controls.name.getError('server') }}</mat-error>
+            } @else if (form.controls.name.hasError('required')) {
+              <mat-error>Η ονομασία είναι υποχρεωτική</mat-error>
+            } @else if (form.controls.name.invalid) {
+              <mat-error>Από 2 έως 100 χαρακτήρες</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Τοποθεσία</mat-label>
+            <input matInput formControlName="location" placeholder="Λάρισα" />
+            <mat-hint>Προαιρετικό</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Έκταση</mat-label>
+            <input matInput type="number" step="0.01" formControlName="areaInStremmas" placeholder="25.50" />
+            <span matTextSuffix>στρέμματα</span>
+            @if (form.controls.areaInStremmas.hasError('required')) {
+              <mat-error>Η έκταση είναι υποχρεωτική</mat-error>
+            } @else if (form.controls.areaInStremmas.invalid) {
+              <mat-error>Πρέπει να είναι μεγαλύτερη από μηδέν</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>ΚΑΕΚ</mat-label>
+            <input matInput formControlName="kaek" inputmode="numeric" maxlength="12" placeholder="123456789012" />
+            @if (form.controls.kaek.hasError('server')) {
+              <mat-error>{{ form.controls.kaek.getError('server') }}</mat-error>
+            } @else if (form.controls.kaek.invalid) {
+              <mat-error>Δώδεκα ψηφία</mat-error>
+            }
+            <mat-hint>Προαιρετικό — δώδεκα ψηφία</mat-hint>
+          </mat-form-field>
+
+          @if (editing) {
+            <mat-slide-toggle formControlName="isActive">Ενεργό αγροτεμάχιο</mat-slide-toggle>
+          }
+
+          @if (errorMessage(); as message) {
+            <p class="error" role="alert">{{ message }}</p>
+          }
+
+          <div class="buttons">
+            <a matButton routerLink="/parcels">Ακύρωση</a>
+            <button matButton="filled" type="submit" [disabled]="form.invalid || submitting()">
+              Αποθήκευση
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="header-row">
+  <h1>Αγροτεμάχια</h1>
+  <a matButton="filled" routerLink="/parcels/new">
+    <mat-icon>add</mat-icon>
+    Νέο αγροτεμάχιο
+  </a>
+</div>
+
+<form [formGroup]="filterForm" class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Αναζήτηση ονόματος</mat-label>
+    <input matInput formControlName="name" placeholder="Κάτω χωράφι" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Τοποθεσία</mat-label>
+    <input matInput formControlName="location" placeholder="Λάρισα" />
+    <mat-icon matSuffix>place</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Κατάσταση</mat-label>
+    <mat-select formControlName="active">
+      <mat-option value="">Όλα</mat-option>
+      <mat-option value="true">Ενεργά</mat-option>
+      <mat-option value="false">Ανενεργά</mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
+
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+<div class="table-wrapper">
+  <table mat-table [dataSource]="rows()" matSort (matSortChange)="onSort($event)">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Ονομασία</th>
+      <td mat-cell *matCellDef="let parcel">{{ parcel.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="location">Τοποθεσία</th>
+      <td mat-cell *matCellDef="let parcel">{{ parcel.location || '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="areaInStremmas">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="areaInStremmas">Έκταση</th>
+      <td mat-cell *matCellDef="let parcel">
+        {{ parcel.areaInStremmas | number: '1.2-2' }} στρ.
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="kaek">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="kaek">ΚΑΕΚ</th>
+      <td mat-cell *matCellDef="let parcel">{{ parcel.kaek || '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="isActive">
+      <th mat-header-cell *matHeaderCellDef>Κατάσταση</th>
+      <td mat-cell *matCellDef="let parcel">
+        <span class="status" [class.inactive]="!parcel.isActive">
+          {{ parcel.isActive ? 'Ενεργό' : 'Ανενεργό' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let parcel" class="actions">
+        <a matIconButton [routerLink]="['/parcels', parcel.uuid]" matTooltip="Επεξεργασία">
+          <mat-icon>edit</mat-icon>
+        </a>
+        @if (parcel.isActive) {
+          <button matIconButton (click)="deactivate(parcel)" matTooltip="Απενεργοποίηση">
+            <mat-icon>block</mat-icon>
+          </button>
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  </table>
+
+  @if (!loading() && rows().length === 0) {
+    <p class="empty">Δεν βρέθηκαν αγροτεμάχια. Ξεκινήστε προσθέτοντας το πρώτο σας χωράφι.</p>
+  }
+</div>
+
+<mat-paginator
+  [length]="total()"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25]"
+  (page)="onPage($event)"
+/>

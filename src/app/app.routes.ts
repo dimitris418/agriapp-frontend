@@ -16,5 +16,24 @@ export const routes: Routes = [
     path: 'register',
     loadComponent: () => import('./features/auth/register/register').then((m) => m.Register),
   },
+  {
+    path: 'parcels',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/parcels/parcel-list/parcel-list').then((m) => m.ParcelList),
+  },
+  // Η σειρά μετράει: το 'new' πρέπει να ταιριάξει πριν το ':uuid'.
+  {
+    path: 'parcels/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/parcels/parcel-form/parcel-form').then((m) => m.ParcelForm),
+  },
+  {
+    path: 'parcels/:uuid',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/parcels/parcel-form/parcel-form').then((m) => m.ParcelForm),
+  },
   { path: '**', redirectTo: '' },
 ];
