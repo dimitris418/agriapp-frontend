@@ -1,4 +1,5 @@
 import { GenericFilters } from './api.model';
+import { ParcelReadOnlyDTO } from './parcel.model';
 import { CropTypeReadOnlyDTO } from './lookup.model';
 
 export interface CropInsertDTO {
@@ -23,6 +24,7 @@ export interface CropUpdateDTO {
 export interface CropReadOnlyDTO {
   id: number;
   uuid: string;
+  parcelReadOnlyDTO: ParcelReadOnlyDTO;
   cropTypeReadOnlyDTO: CropTypeReadOnlyDTO;
   variety: string | null;
   cultivationYear: number;
