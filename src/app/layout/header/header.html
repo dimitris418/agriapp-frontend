@@ -1,0 +1,16 @@
+<mat-toolbar color="primary" class="header">
+  <a routerLink="/" class="brand">
+    <mat-icon>agriculture</mat-icon>
+    <span>Ημερολόγιο Αγρού</span>
+  </a>
+
+  <nav class="nav">
+    <a mat-button routerLink="/parcels" routerLinkActive="active">Αγροτεμάχια</a>
+    <a mat-button routerLink="/crops" routerLinkActive="active">Καλλιέργειες</a>
+    <a mat-button routerLink="/activities" routerLinkActive="active">Ημερολόγιο</a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <a mat-stroked-button routerLink="/login">Σύνδεση</a>
+</mat-toolbar>

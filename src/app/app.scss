@@ -1,0 +1,10 @@
+// Ο footer μένει στο κάτω μέρος ακόμη και σε σελίδες με λίγο περιεχόμενο.
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+}
