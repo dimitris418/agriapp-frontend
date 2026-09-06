@@ -1,0 +1,45 @@
+<section class="welcome">
+  <h1>Καλώς ήρθατε, {{ fullname() }}</h1>
+  <p>Καταγράψτε τις εργασίες του αγρού σας και κρατήστε το ημερολόγιο φυτοπροστασίας ενήμερο.</p>
+</section>
+
+<div class="row g-3">
+  <div class="col-12 col-md-4">
+    <mat-card>
+      <mat-card-content>
+        <mat-icon>grass</mat-icon>
+        <h2>Αγροτεμάχια</h2>
+        <p>Τα χωράφια σας, με έκταση, τοποθεσία και ΚΑΕΚ.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <a matButton routerLink="/parcels">Άνοιγμα</a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <mat-card>
+      <mat-card-content>
+        <mat-icon>agriculture</mat-icon>
+        <h2>Καλλιέργειες</h2>
+        <p>Σιτηρά ανά αγροτεμάχιο και καλλιεργητική περίοδο.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <a matButton routerLink="/crops">Άνοιγμα</a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <mat-card>
+      <mat-card-content>
+        <mat-icon>event_note</mat-icon>
+        <h2>Ημερολόγιο</h2>
+        <p>Ψεκασμοί, λιπάνσεις, αρδεύσεις, παρατηρήσεις και συγκομιδές.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <a matButton routerLink="/activities">Άνοιγμα</a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

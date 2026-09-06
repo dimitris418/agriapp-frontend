@@ -4,13 +4,28 @@
     <span>Ημερολόγιο Αγρού</span>
   </a>
 
-  <nav class="nav">
-    <a mat-button routerLink="/parcels" routerLinkActive="active">Αγροτεμάχια</a>
-    <a mat-button routerLink="/crops" routerLinkActive="active">Καλλιέργειες</a>
-    <a mat-button routerLink="/activities" routerLinkActive="active">Ημερολόγιο</a>
-  </nav>
+  @if (isLoggedIn()) {
+    <nav class="nav">
+      <a matButton routerLink="/parcels" routerLinkActive="active">Αγροτεμάχια</a>
+      <a matButton routerLink="/crops" routerLinkActive="active">Καλλιέργειες</a>
+      <a matButton routerLink="/activities" routerLinkActive="active">Ημερολόγιο</a>
+    </nav>
+  }
 
   <span class="spacer"></span>
 
-  <a mat-stroked-button routerLink="/login">Σύνδεση</a>
+  @if (isLoggedIn()) {
+    <button matButton [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+      {{ fullname() }}
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Αποσύνδεση</span>
+      </button>
+    </mat-menu>
+  } @else {
+    <a matButton="outlined" routerLink="/login">Σύνδεση</a>
+  }
 </mat-toolbar>
