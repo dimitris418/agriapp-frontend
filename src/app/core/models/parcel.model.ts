@@ -31,6 +31,7 @@ export interface ParcelReadOnlyDTO {
 export interface ParcelFilters extends GenericFilters {
   uuid?: string;
   name?: string;
+  location?: string;
   kaek?: string;
   active?: boolean;
 }
