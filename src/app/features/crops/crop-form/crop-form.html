@@ -1,0 +1,98 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <mat-card>
+      @if (loading() || submitting()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+
+      <mat-card-header>
+        <mat-card-title>{{ editing ? 'Επεξεργασία καλλιέργειας' : 'Νέα καλλιέργεια' }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+          <mat-form-field appearance="outline">
+            <mat-label>Αγροτεμάχιο</mat-label>
+            <mat-select formControlName="parcelUuid">
+              @for (parcel of parcelOptions(); track parcel.uuid) {
+                <mat-option [value]="parcel.uuid">{{ parcel.name }}</mat-option>
+              }
+            </mat-select>
+            @if (form.controls.parcelUuid.hasError('required')) {
+              <mat-error>Επιλέξτε αγροτεμάχιο</mat-error>
+            }
+            @if (editing) {
+              <mat-hint>Το αγροτεμάχιο δεν αλλάζει μετά τη δημιουργία</mat-hint>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Είδος σιτηρού</mat-label>
+            <mat-select formControlName="cropTypeId">
+              @for (type of cropTypeOptions(); track type.id) {
+                <mat-option [value]="type.id">{{ type.name }} — {{ type.latinName }}</mat-option>
+              }
+            </mat-select>
+            @if (form.controls.cropTypeId.hasError('required')) {
+              <mat-error>Επιλέξτε είδος</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="row g-2">
+            <div class="col-12 col-sm-7">
+              <mat-form-field appearance="outline">
+                <mat-label>Ποικιλία</mat-label>
+                <input matInput formControlName="variety" placeholder="Σίμετο" />
+                @if (form.controls.variety.hasError('server')) {
+                  <mat-error>{{ form.controls.variety.getError('server') }}</mat-error>
+                } @else if (form.controls.variety.invalid) {
+                  <mat-error>Έως 50 χαρακτήρες</mat-error>
+                }
+                <mat-hint>Προαιρετικό</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="col-12 col-sm-5">
+              <mat-form-field appearance="outline">
+                <mat-label>Έτος</mat-label>
+                <input matInput type="number" formControlName="cultivationYear" />
+                @if (form.controls.cultivationYear.invalid) {
+                  <mat-error>Από 2000 έως 2100</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row g-2">
+            <div class="col-12 col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Ημερομηνία σποράς</mat-label>
+                <input matInput type="date" formControlName="plantingDate" />
+                <mat-hint>Προαιρετικό</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="col-12 col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Αναμενόμενη συγκομιδή</mat-label>
+                <input matInput type="date" formControlName="expectedHarvestDate" />
+                <mat-hint>Προαιρετικό</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+
+          @if (errorMessage(); as message) {
+            <p class="error" role="alert">{{ message }}</p>
+          }
+
+          <div class="buttons">
+            <a matButton routerLink="/crops">Ακύρωση</a>
+            <button matButton="filled" type="submit" [disabled]="form.invalid || submitting()">
+              Αποθήκευση
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

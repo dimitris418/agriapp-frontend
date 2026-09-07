@@ -35,5 +35,20 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/parcels/parcel-form/parcel-form').then((m) => m.ParcelForm),
   },
+  {
+    path: 'crops',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/crops/crop-list/crop-list').then((m) => m.CropList),
+  },
+  {
+    path: 'crops/new',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/crops/crop-form/crop-form').then((m) => m.CropForm),
+  },
+  {
+    path: 'crops/:uuid',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/crops/crop-form/crop-form').then((m) => m.CropForm),
+  },
   { path: '**', redirectTo: '' },
 ];

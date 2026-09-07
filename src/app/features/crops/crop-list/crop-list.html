@@ -1,0 +1,112 @@
+<div class="header-row">
+  <h1>Καλλιέργειες</h1>
+  <a matButton="filled" routerLink="/crops/new">
+    <mat-icon>add</mat-icon>
+    Νέα καλλιέργεια
+  </a>
+</div>
+
+<form [formGroup]="filterForm" class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Αγροτεμάχιο</mat-label>
+    <mat-select formControlName="parcelUuid">
+      <mat-option value="">Όλα</mat-option>
+      @for (parcel of parcelOptions(); track parcel.uuid) {
+        <mat-option [value]="parcel.uuid">{{ parcel.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Είδος</mat-label>
+    <mat-select formControlName="cropTypeId">
+      <mat-option value="">Όλα</mat-option>
+      @for (type of cropTypeOptions(); track type.id) {
+        <mat-option [value]="type.id">{{ type.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Έτος</mat-label>
+    <input matInput formControlName="cultivationYear" inputmode="numeric" placeholder="2026" />
+  </mat-form-field>
+</form>
+
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+<div class="table-wrapper">
+  <table mat-table [dataSource]="rows()" matSort (matSortChange)="onSort($event)">
+    <ng-container matColumnDef="parcel">
+      <th mat-header-cell *matHeaderCellDef>Αγροτεμάχιο</th>
+      <td mat-cell *matCellDef="let crop">{{ crop.parcelReadOnlyDTO.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cropType">
+      <th mat-header-cell *matHeaderCellDef>Είδος</th>
+      <td mat-cell *matCellDef="let crop">{{ crop.cropTypeReadOnlyDTO.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="variety">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="variety">Ποικιλία</th>
+      <td mat-cell *matCellDef="let crop">{{ crop.variety || '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cultivationYear">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="cultivationYear">Έτος</th>
+      <td mat-cell *matCellDef="let crop">{{ crop.cultivationYear }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="plantingDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="plantingDate">Σπορά</th>
+      <td mat-cell *matCellDef="let crop">{{ crop.plantingDate || '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="harvestDate">
+      <th mat-header-cell *matHeaderCellDef>Συγκομιδή</th>
+      <td mat-cell *matCellDef="let crop">
+        @if (crop.harvestDate) {
+          <span class="status harvested">{{ crop.harvestDate }}</span>
+        } @else {
+          <span class="status">Σε εξέλιξη</span>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let crop" class="actions">
+        <a
+          matIconButton
+          [routerLink]="['/activities']"
+          [queryParams]="{ cropUuid: crop.uuid }"
+          matTooltip="Ημερολόγιο"
+        >
+          <mat-icon>event_note</mat-icon>
+        </a>
+        <a matIconButton [routerLink]="['/crops', crop.uuid]" matTooltip="Επεξεργασία">
+          <mat-icon>edit</mat-icon>
+        </a>
+        <button matIconButton (click)="remove(crop)" matTooltip="Διαγραφή">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  </table>
+
+  @if (!loading() && rows().length === 0) {
+    <p class="empty">Δεν βρέθηκαν καλλιέργειες. Προσθέστε την πρώτη σας σπορά.</p>
+  }
+</div>
+
+<mat-paginator
+  [length]="total()"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25]"
+  (page)="onPage($event)"
+/>
