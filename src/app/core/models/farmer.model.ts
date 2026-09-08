@@ -1,3 +1,4 @@
+import { GenericFilters } from './api.model';
 import { UserInsertDTO, UserReadOnlyDTO, UserUpdateDTO } from './user.model';
 
 export interface FarmerInsertDTO {
@@ -22,4 +23,12 @@ export interface FarmerReadOnlyDTO {
   phone: string | null;
   isActive: boolean;
   userReadOnlyDTO: UserReadOnlyDTO;
+}
+
+export interface FarmerFilters extends GenericFilters {
+  uuid?: string;
+  lastname?: string;
+  username?: string;
+  registryNumber?: string;
+  active?: boolean;
 }

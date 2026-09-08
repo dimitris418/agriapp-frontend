@@ -16,6 +16,7 @@ export interface UserUpdateDTO {
 }
 
 export interface UserReadOnlyDTO {
+  id: number;
   firstname: string;
   lastname: string;
   username: string;
