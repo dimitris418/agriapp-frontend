@@ -4,6 +4,9 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.5rem;
+  // Αδιαφανές: στις οθόνες σύνδεσης και εγγραφής η φωτογραφία περνάει κάτω
+  // από όλο το viewport και το κείμενο του footer θα χανόταν πάνω της.
+  background: var(--mat-sys-surface-container);
   border-top: 1px solid var(--mat-sys-outline-variant);
   color: var(--mat-sys-on-surface-variant);
   font: var(--mat-sys-body-small);
