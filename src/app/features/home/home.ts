@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,4 +15,5 @@ export class Home {
   private readonly auth = inject(Auth);
 
   protected readonly fullname = this.auth.fullname;
+  protected readonly isAdmin = computed(() => this.auth.role() === 'ADMIN');
 }

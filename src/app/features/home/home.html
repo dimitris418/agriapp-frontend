@@ -1,7 +1,28 @@
 <section class="welcome">
   <h1>Καλώς ήρθατε, {{ fullname() }}</h1>
-  <p>Καταγράψτε τις εργασίες του αγρού σας και κρατήστε το ημερολόγιο φυτοπροστασίας ενήμερο.</p>
+  @if (isAdmin()) {
+    <p>Διαχειριστική προβολή των λογαριασμών της εφαρμογής.</p>
+  } @else {
+    <p>Καταγράψτε τις εργασίες του αγρού σας και κρατήστε το ημερολόγιο φυτοπροστασίας ενήμερο.</p>
+  }
 </section>
+
+@if (isAdmin()) {
+  <div class="row g-3">
+    <div class="col-12 col-md-4">
+      <mat-card>
+        <mat-card-content>
+          <mat-icon>groups</mat-icon>
+          <h2>Αγρότες</h2>
+          <p>Οι εγγεγραμμένοι λογαριασμοί, με αναζήτηση και σελιδοποίηση.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <a matButton routerLink="/admin/farmers">Άνοιγμα</a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+} @else {
 
 <div class="row g-3">
   <div class="col-12 col-md-4">
@@ -43,3 +64,4 @@
     </mat-card>
   </div>
 </div>
+}

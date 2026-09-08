@@ -4,11 +4,17 @@
     <span>Ημερολόγιο Αγρού</span>
   </a>
 
-  @if (isLoggedIn()) {
+  @if (isFarmer()) {
     <nav class="nav">
       <a matButton routerLink="/parcels" routerLinkActive="active">Αγροτεμάχια</a>
       <a matButton routerLink="/crops" routerLinkActive="active">Καλλιέργειες</a>
       <a matButton routerLink="/activities" routerLinkActive="active">Ημερολόγιο</a>
+    </nav>
+  }
+
+  @if (isAdmin()) {
+    <nav class="nav">
+      <a matButton routerLink="/admin/farmers" routerLinkActive="active">Αγρότες</a>
     </nav>
   }
 
@@ -20,6 +26,12 @@
       {{ fullname() }}
     </button>
     <mat-menu #userMenu="matMenu">
+      @if (isFarmer()) {
+        <a mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon>
+          <span>Το προφίλ μου</span>
+        </a>
+      }
       <button mat-menu-item (click)="logout()">
         <mat-icon>logout</mat-icon>
         <span>Αποσύνδεση</span>
