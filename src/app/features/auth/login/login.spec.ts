@@ -52,7 +52,7 @@ describe('Login', () => {
       .flush({}, { status: 401, statusText: 'Unauthorized' });
     await fixture.whenStable();
 
-    expect(fixture.nativeElement.textContent).toContain('Λάθος όνομα χρήστη ή κωδικός');
+    expect(fixture.nativeElement.textContent).toContain('Δεν ήταν δυνατή η σύνδεση');
     httpMock.verify();
   });
 });
