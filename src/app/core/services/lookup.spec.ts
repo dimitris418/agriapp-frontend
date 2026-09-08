@@ -39,4 +39,11 @@ describe('Lookup', () => {
     expect(request.request.params.get('category')).toBe('FERTILIZER');
     request.flush([]);
   });
+
+  it('should fetch the regional units once and share the result', () => {
+    service.getRegionalUnits().subscribe();
+    service.getRegionalUnits().subscribe();
+
+    httpMock.expectOne((req) => req.url.endsWith('/regional-units')).flush([]);
+  });
 });
