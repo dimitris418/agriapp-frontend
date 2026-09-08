@@ -57,3 +57,11 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Πηγές υλικού
+
+Η φωτογραφία στο φόντο των οθονών σύνδεσης και εγγραφής
+(`public/images/field.jpg`) είναι του **Meriç Tuna** και προέρχεται από το
+[Pexels](https://www.pexels.com/photo/30556729/), υπό την
+[άδεια του Pexels](https://www.pexels.com/license/). Έχει περικοπεί σε
+1920×1280 και συμπιεστεί για χρήση στο web.
