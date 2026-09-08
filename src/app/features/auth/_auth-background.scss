@@ -1,0 +1,49 @@
+// Κοινό φόντο για τις οθόνες σύνδεσης και εγγραφής.
+//
+// Το layout τυλίγει το router-outlet σε .container, οπότε το φόντο δεν μπορεί
+// να απλωθεί από το ίδιο το component. Δύο fixed pseudo-elements πάνω σε
+// ολόκληρο το viewport το λύνουν: το ::before κρατάει τη φωτογραφία, το
+// ::after τη σκιάζει ώστε η κάρτα να ξεχωρίζει.
+
+:host {
+  position: relative;
+  display: block;
+}
+
+:host::before,
+:host::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+:host::before {
+  // Το gradient είναι κάτω από τη φωτογραφία: αν λείψει το αρχείο, η οθόνη
+  // παραμένει διαβάσιμη αντί να μαυρίσει.
+  background:
+    url('/images/field.jpg') center / cover no-repeat,
+    linear-gradient(160deg, #1f3d24, #3f6b3a);
+  animation: slow-zoom 40s ease-in-out infinite alternate;
+}
+
+:host::after {
+  background: linear-gradient(to bottom, rgb(0 0 0 / 40%), rgb(0 0 0 / 25%));
+}
+
+@keyframes slow-zoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host::before {
+    animation: none;
+  }
+}
