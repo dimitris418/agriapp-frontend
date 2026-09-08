@@ -1,0 +1,19 @@
+.profile-card {
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.error {
+  color: var(--mat-sys-error);
+  margin: 0 0 1rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}

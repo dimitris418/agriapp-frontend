@@ -1,0 +1,95 @@
+<mat-card class="profile-card">
+  <mat-card-header>
+    <mat-card-title>Το προφίλ μου</mat-card-title>
+    <mat-card-subtitle>{{ username() }}</mat-card-subtitle>
+  </mat-card-header>
+
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  <mat-card-content>
+    @if (errorMessage(); as message) {
+      <p class="error">{{ message }}</p>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="row g-3">
+      <div class="col-12 col-md-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Όνομα</mat-label>
+          <input matInput formControlName="firstname" placeholder="Δημήτρης" />
+          @if (form.controls.firstname.hasError('server')) {
+            <mat-error>{{ form.controls.firstname.getError('server') }}</mat-error>
+          } @else if (form.controls.firstname.invalid) {
+            <mat-error>Από 2 έως 50 χαρακτήρες.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Επώνυμο</mat-label>
+          <input matInput formControlName="lastname" placeholder="Παπαδάκης" />
+          @if (form.controls.lastname.hasError('server')) {
+            <mat-error>{{ form.controls.lastname.getError('server') }}</mat-error>
+          } @else if (form.controls.lastname.invalid) {
+            <mat-error>Από 2 έως 50 χαρακτήρες.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <mat-form-field appearance="outline">
+          <mat-label>ΑΦΜ</mat-label>
+          <input matInput formControlName="vat" inputmode="numeric" placeholder="123456789" />
+          @if (form.controls.vat.hasError('server')) {
+            <mat-error>{{ form.controls.vat.getError('server') }}</mat-error>
+          } @else if (form.controls.vat.invalid) {
+            <mat-error>Εννέα ψηφία.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Αριθμός μητρώου αγροτών</mat-label>
+          <input matInput formControlName="registryNumber" inputmode="numeric" placeholder="123456" />
+          @if (form.controls.registryNumber.invalid) {
+            <mat-error>Μόνο ψηφία, έως 20.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Τηλέφωνο</mat-label>
+          <input matInput formControlName="phone" inputmode="numeric" placeholder="6912345678" />
+          @if (form.controls.phone.invalid) {
+            <mat-error>Δέκα ψηφία.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <mat-form-field appearance="outline">
+          <mat-label>Νέο συνθηματικό</mat-label>
+          <input matInput type="password" formControlName="password" autocomplete="new-password" />
+          <mat-hint>Αφήστε το κενό για να μείνει το ίδιο.</mat-hint>
+          @if (form.controls.password.invalid) {
+            <mat-error>
+              Τουλάχιστον 8 χαρακτήρες, με πεζό, κεφαλαίο, ψηφίο και σύμβολο.
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 actions">
+        <a matButton routerLink="/">Άκυρο</a>
+        <button matButton="filled" type="submit" [disabled]="form.invalid || submitting()">
+          <mat-icon>save</mat-icon>
+          Αποθήκευση
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

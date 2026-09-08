@@ -43,6 +43,14 @@ export class Auth {
     return this.session()?.token ?? null;
   }
 
+  // Το ονοματεπώνυμο της κεφαλίδας έρχεται από την απόκριση της σύνδεσης, όχι
+  // από το token. Χωρίς αυτό θα έμενε στην παλιά τιμή μέχρι την επόμενη σύνδεση.
+  updateName(firstname: string, lastname: string): void {
+    const session = this.session();
+    if (!session) return;
+    this.store({ ...session, firstname, lastname });
+  }
+
   private store(response: AuthenticationResponse): void {
     localStorage.setItem(SESSION_KEY, JSON.stringify(response));
     this.session.set(response);
