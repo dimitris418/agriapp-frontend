@@ -1,0 +1,179 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <mat-card>
+      @if (loading() || submitting()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+
+      <mat-card-header>
+        <mat-card-title>{{ editing ? 'Επεξεργασία εργασίας' : 'Νέα εργασία αγρού' }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+          <mat-form-field appearance="outline">
+            <mat-label>Καλλιέργεια</mat-label>
+            <mat-select formControlName="cropUuid">
+              @for (crop of cropOptions(); track crop.uuid) {
+                <mat-option [value]="crop.uuid">
+                  {{ crop.parcelReadOnlyDTO.name }} — {{ crop.cropTypeReadOnlyDTO.name }}
+                  ({{ crop.cultivationYear }})
+                </mat-option>
+              }
+            </mat-select>
+            @if (form.controls.cropUuid.hasError('required')) {
+              <mat-error>Επιλέξτε καλλιέργεια</mat-error>
+            }
+            @if (editing) {
+              <mat-hint>Η καλλιέργεια δεν αλλάζει μετά την καταχώρηση</mat-hint>
+            }
+          </mat-form-field>
+
+          <div class="row g-2">
+            <div class="col-12 col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Τύπος εργασίας</mat-label>
+                <mat-select formControlName="type">
+                  @for (type of types; track type) {
+                    <mat-option [value]="type">{{ typeLabels[type] }}</mat-option>
+                  }
+                </mat-select>
+                @if (form.controls.type.hasError('required')) {
+                  <mat-error>Επιλέξτε τύπο</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <div class="col-12 col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Ημερομηνία</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="activityPicker"
+                  [max]="today"
+                  formControlName="activityDate"
+                  placeholder="ηη/μμ/εεεε"
+                />
+                <mat-datepicker-toggle matIconSuffix [for]="activityPicker" />
+                <mat-datepicker #activityPicker />
+                @if (form.controls.activityDate.hasError('server')) {
+                  <mat-error>{{ form.controls.activityDate.getError('server') }}</mat-error>
+                } @else if (form.controls.activityDate.hasError('required')) {
+                  <mat-error>Η ημερομηνία είναι υποχρεωτική</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+
+          @if (rule(); as rule) {
+            @if (rule.productCategories) {
+              <mat-form-field appearance="outline">
+                <mat-label>Σκεύασμα</mat-label>
+                <mat-select formControlName="productId">
+                  @for (product of productOptions(); track product.id) {
+                    <mat-option [value]="product.id">
+                      {{ product.name }} — {{ product.activeSubstance }}
+                    </mat-option>
+                  }
+                </mat-select>
+                @if (form.controls.productId.hasError('required')) {
+                  <mat-error>Επιλέξτε σκεύασμα</mat-error>
+                }
+                @if (selectedProduct()?.preHarvestIntervalDays; as phi) {
+                  <mat-hint>Χρόνος αναμονής πριν τη συγκομιδή: {{ phi }} ημέρες</mat-hint>
+                }
+              </mat-form-field>
+            }
+
+            @if (rule.quantity) {
+              <div class="row g-2">
+                <div class="col-12 col-sm-7">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Ποσότητα</mat-label>
+                    <input matInput type="number" step="0.01" formControlName="quantity" />
+                    @if (form.controls.quantity.invalid) {
+                      <mat-error>Απαιτείται μη αρνητική ποσότητα</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                <div class="col-12 col-sm-5">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Μονάδα</mat-label>
+                    <mat-select formControlName="unit">
+                      @for (unit of units; track unit) {
+                        <mat-option [value]="unit">{{ unitLabels[unit] }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (form.controls.unit.hasError('required')) {
+                      <mat-error>Επιλέξτε μονάδα</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+            }
+
+            @if (rule.observation) {
+              <div class="row g-2">
+                <div class="col-12 col-sm-7">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Εχθρός ή ασθένεια</mat-label>
+                    <mat-select formControlName="pestId">
+                      @for (pest of pestOptions(); track pest.id) {
+                        <mat-option [value]="pest.id">{{ pest.name }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (form.controls.pestId.hasError('required')) {
+                      <mat-error>Επιλέξτε εχθρό ή ασθένεια</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                <div class="col-12 col-sm-5">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Ένταση</mat-label>
+                    <mat-select formControlName="severity">
+                      @for (severity of severities; track severity) {
+                        <mat-option [value]="severity">{{ severityLabels[severity] }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (form.controls.severity.hasError('required')) {
+                      <mat-error>Επιλέξτε ένταση</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+            }
+          }
+
+          <mat-form-field appearance="outline">
+            <mat-label>Σημειώσεις</mat-label>
+            <textarea matInput rows="3" formControlName="notes"></textarea>
+            @if (form.controls.notes.invalid) {
+              <mat-error>Έως 500 χαρακτήρες</mat-error>
+            }
+            <mat-hint>Προαιρετικό</mat-hint>
+          </mat-form-field>
+
+          @if (harvestWarning(); as warning) {
+            <p class="warning" role="status">
+              <span class="warning-title">Προσοχή στον χρόνο αναμονής</span>
+              {{ warning }}
+            </p>
+          }
+
+          @if (errorMessage(); as message) {
+            <p class="error" role="alert">{{ message }}</p>
+          }
+
+          <div class="buttons">
+            <a matButton routerLink="/activities">Ακύρωση</a>
+            <button matButton="filled" type="submit" [disabled]="form.invalid || submitting()">
+              Αποθήκευση
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

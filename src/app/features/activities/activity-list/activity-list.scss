@@ -1,0 +1,85 @@
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.header-row h1 {
+  font: var(--mat-sys-headline-small);
+  margin: 0;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.filters mat-form-field {
+  min-width: 11rem;
+}
+
+.filters mat-form-field:first-child {
+  min-width: 20rem;
+}
+
+.table-wrapper {
+  background: var(--mat-sys-surface);
+  border-radius: var(--mat-sys-corner-medium);
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  background: transparent;
+}
+
+.crop {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.crop small {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.type {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-small);
+  white-space: nowrap;
+}
+
+// Ο ψεκασμός και η συγκομιδή ξεχωρίζουν οπτικά: ο πρώτος γιατί δεσμεύει τον
+// χρόνο αναμονής, η δεύτερη γιατί κλείνει την καλλιέργεια.
+.type-spraying {
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.type-harvest {
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.notes {
+  max-width: 18rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.empty {
+  padding: 2rem 1rem;
+  margin: 0;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
