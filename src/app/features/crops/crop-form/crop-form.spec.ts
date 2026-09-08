@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { CropForm } from './crop-form';
 
@@ -10,6 +11,7 @@ function configure(params: Record<string, string>) {
     providers: [
       provideHttpClient(),
       provideHttpClientTesting(),
+      provideNativeDateAdapter(),
       provideRouter([{ path: 'crops', children: [] }]),
       {
         provide: ActivatedRoute,
@@ -55,7 +57,7 @@ describe('CropForm', () => {
         id: 1,
         uuid: 'p1',
         name: 'Κάτω χωράφι',
-        location: null,
+        regionalUnitReadOnlyDTO: null,
         areaInStremmas: 25.5,
         kaek: null,
         isActive: true,

@@ -67,7 +67,14 @@
             <div class="col-12 col-sm-6">
               <mat-form-field appearance="outline">
                 <mat-label>Ημερομηνία σποράς</mat-label>
-                <input matInput type="date" formControlName="plantingDate" />
+                <input
+                  matInput
+                  [matDatepicker]="plantingPicker"
+                  formControlName="plantingDate"
+                  placeholder="ηη/μμ/εεεε"
+                />
+                <mat-datepicker-toggle matIconSuffix [for]="plantingPicker" />
+                <mat-datepicker #plantingPicker />
                 <mat-hint>Προαιρετικό</mat-hint>
               </mat-form-field>
             </div>
@@ -75,7 +82,14 @@
             <div class="col-12 col-sm-6">
               <mat-form-field appearance="outline">
                 <mat-label>Αναμενόμενη συγκομιδή</mat-label>
-                <input matInput type="date" formControlName="expectedHarvestDate" />
+                <input
+                  matInput
+                  [matDatepicker]="harvestPicker"
+                  formControlName="expectedHarvestDate"
+                  placeholder="ηη/μμ/εεεε"
+                />
+                <mat-datepicker-toggle matIconSuffix [for]="harvestPicker" />
+                <mat-datepicker #harvestPicker />
                 <mat-hint>Προαιρετικό</mat-hint>
               </mat-form-field>
             </div>

@@ -3,6 +3,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -15,6 +16,7 @@ import { ParcelReadOnlyDTO } from '../../../core/models/parcel.model';
 import { Crop } from '../../../core/services/crop';
 import { Lookup } from '../../../core/services/lookup';
 import { Parcel } from '../../../core/services/parcel';
+import { fromIsoDate, toIsoDate } from '../../../core/utils/date';
 
 @Component({
   imports: [
@@ -24,6 +26,7 @@ import { Parcel } from '../../../core/services/parcel';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatDatepickerModule,
     MatButtonModule,
     MatProgressBarModule,
     MatSnackBarModule,
@@ -49,8 +52,8 @@ export class CropForm implements OnInit {
       new Date().getFullYear(),
       [Validators.required, Validators.min(2000), Validators.max(2100)],
     ],
-    plantingDate: [''],
-    expectedHarvestDate: [''],
+    plantingDate: [null as Date | null],
+    expectedHarvestDate: [null as Date | null],
   });
 
   protected readonly submitting = signal(false);
@@ -92,8 +95,8 @@ export class CropForm implements OnInit {
           cropTypeId: crop.cropTypeReadOnlyDTO.id,
           variety: crop.variety ?? '',
           cultivationYear: crop.cultivationYear,
-          plantingDate: crop.plantingDate ?? '',
-          expectedHarvestDate: crop.expectedHarvestDate ?? '',
+          plantingDate: fromIsoDate(crop.plantingDate),
+          expectedHarvestDate: fromIsoDate(crop.expectedHarvestDate),
         });
         // Το CropUpdateDTO δεν δέχεται αγροτεμάχιο: η μεταφορά καλλιέργειας σε
         // άλλο χωράφι θα άλλαζε το νόημα των εργασιών που κρέμονται από αυτήν.
@@ -119,8 +122,8 @@ export class CropForm implements OnInit {
       cropTypeId: value.cropTypeId as number,
       variety: value.variety.trim() || undefined,
       cultivationYear: value.cultivationYear,
-      plantingDate: value.plantingDate || undefined,
-      expectedHarvestDate: value.expectedHarvestDate || undefined,
+      plantingDate: toIsoDate(value.plantingDate),
+      expectedHarvestDate: toIsoDate(value.expectedHarvestDate),
     };
 
     const request = this.existing
