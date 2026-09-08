@@ -1,0 +1,85 @@
+<div class="header-row">
+  <h1>Εγγεγραμμένοι αγρότες</h1>
+  <span class="count">{{ total() }} συνολικά</span>
+</div>
+
+<form [formGroup]="filterForm" class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Αναζήτηση επωνύμου</mat-label>
+    <input matInput formControlName="lastname" placeholder="Παπαδάκης" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Αναζήτηση χρήστη</mat-label>
+    <input matInput formControlName="username" placeholder="owner@example.com" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Κατάσταση</mat-label>
+    <mat-select formControlName="active">
+      <mat-option value="">Όλοι</mat-option>
+      <mat-option value="true">Ενεργοί</mat-option>
+      <mat-option value="false">Ανενεργοί</mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
+
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+<div class="table-wrapper">
+  <table mat-table [dataSource]="rows()" matSort (matSortChange)="onSort($event)">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="user.lastname">Ονοματεπώνυμο</th>
+      <td mat-cell *matCellDef="let farmer">
+        {{ farmer.userReadOnlyDTO.lastname }} {{ farmer.userReadOnlyDTO.firstname }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="user.username">Χρήστης</th>
+      <td mat-cell *matCellDef="let farmer">{{ farmer.userReadOnlyDTO.username }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="vat">
+      <th mat-header-cell *matHeaderCellDef>ΑΦΜ</th>
+      <td mat-cell *matCellDef="let farmer">{{ farmer.userReadOnlyDTO.vat }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="registryNumber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="registryNumber">Μητρώο</th>
+      <td mat-cell *matCellDef="let farmer">{{ farmer.registryNumber || '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef>Τηλέφωνο</th>
+      <td mat-cell *matCellDef="let farmer">{{ farmer.phone || '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="isActive">
+      <th mat-header-cell *matHeaderCellDef>Κατάσταση</th>
+      <td mat-cell *matCellDef="let farmer">
+        <span class="status" [class.inactive]="!farmer.isActive">
+          {{ farmer.isActive ? 'Ενεργός' : 'Ανενεργός' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  </table>
+
+  @if (!loading() && rows().length === 0) {
+    <p class="empty">Δεν βρέθηκαν αγρότες με αυτά τα κριτήρια.</p>
+  }
+</div>
+
+<mat-paginator
+  [length]="total()"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25]"
+  (page)="onPage($event)"
+/>
