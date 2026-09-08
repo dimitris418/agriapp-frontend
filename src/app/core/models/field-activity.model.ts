@@ -1,4 +1,5 @@
 import { GenericFilters } from './api.model';
+import { CropReadOnlyDTO } from './crop.model';
 import { ActivityType, SeverityLevel, UnitOfMeasure } from './enums';
 import { PestReadOnlyDTO, ProductReadOnlyDTO } from './lookup.model';
 
@@ -30,6 +31,7 @@ export interface FieldActivityUpdateDTO {
 export interface FieldActivityReadOnlyDTO {
   id: number;
   uuid: string;
+  cropReadOnlyDTO: CropReadOnlyDTO;
   activityDate: string;
   type: ActivityType;
   productReadOnlyDTO: ProductReadOnlyDTO | null;
