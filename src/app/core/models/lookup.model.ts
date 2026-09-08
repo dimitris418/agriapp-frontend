@@ -19,3 +19,14 @@ export interface PestReadOnlyDTO {
   latinName: string | null;
   type: string;
 }
+
+export interface RegionReadOnlyDTO {
+  id: number;
+  name: string;
+}
+
+export interface RegionalUnitReadOnlyDTO {
+  id: number;
+  name: string;
+  regionReadOnlyDTO: RegionReadOnlyDTO;
+}

@@ -1,8 +1,9 @@
 import { GenericFilters } from './api.model';
+import { RegionalUnitReadOnlyDTO } from './lookup.model';
 
 export interface ParcelInsertDTO {
   name: string;
-  location?: string;
+  regionalUnitId?: number;
   areaInStremmas: number;
   kaek?: string;
   isActive: boolean;
@@ -12,7 +13,7 @@ export interface ParcelUpdateDTO {
   id: number;
   uuid: string;
   name: string;
-  location?: string;
+  regionalUnitId?: number;
   areaInStremmas: number;
   kaek?: string;
   isActive: boolean;
@@ -22,7 +23,7 @@ export interface ParcelReadOnlyDTO {
   id: number;
   uuid: string;
   name: string;
-  location: string | null;
+  regionalUnitReadOnlyDTO: RegionalUnitReadOnlyDTO | null;
   areaInStremmas: number;
   kaek: string | null;
   isActive: boolean;
@@ -31,7 +32,7 @@ export interface ParcelReadOnlyDTO {
 export interface ParcelFilters extends GenericFilters {
   uuid?: string;
   name?: string;
-  location?: string;
+  regionalUnitId?: number;
   kaek?: string;
   active?: boolean;
 }
