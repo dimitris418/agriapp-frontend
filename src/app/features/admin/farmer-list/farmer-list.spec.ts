@@ -1,8 +1,14 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
 import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { FarmerList } from './farmer-list';
+
+// Ο διάλογος επιβεβαίωσης απαντά πάντα "ναι", ώστε το τεστ να ελέγχει το
+// αίτημα και όχι το Material.
+const dialogStub = { open: () => ({ afterClosed: () => of(true) }) };
 
 const page = {
   data: [
@@ -52,7 +58,14 @@ describe('FarmerList', () => {
     await TestBed.configureTestingModule({
       imports: [FarmerList],
       providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
-    }).compileComponents();
+    })
+      // Ο provider μπαίνει στο ίδιο το component: το MatDialogModule που
+      // εισάγει δίνει το δικό του MatDialog στον ίδιο environment injector με
+      // τα providers του TestBed, οπότε εκεί ο stub θα χανόταν.
+      .overrideComponent(FarmerList, {
+        add: { providers: [{ provide: MatDialog, useValue: dialogStub }] },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(FarmerList);
     httpMock = TestBed.inject(HttpTestingController);
@@ -75,6 +88,25 @@ describe('FarmerList', () => {
     expect(request.request.params.get('sortBy')).toBe('user.lastname');
     expect(request.request.params.get('lastname')).toBeNull();
     request.flush(page);
+    httpMock.verify();
+  });
+
+  it('should deactivate a farmer once the dialog is confirmed', async () => {
+    httpMock.expectOne((req) => req.url.endsWith('/farmers')).flush(page);
+    await fixture.whenStable();
+
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector(
+      'tbody tr:first-child .actions button',
+    );
+    button.click();
+    await fixture.whenStable();
+
+    const request = httpMock.expectOne((req) => req.url.endsWith('/farmers/f1/status'));
+    expect(request.request.method).toBe('PATCH');
+    expect(request.request.body).toEqual({ isActive: false });
+    request.flush({ ...page.data[0], isActive: false });
+
+    httpMock.expectOne((req) => req.url.endsWith('/farmers')).flush(page);
     httpMock.verify();
   });
 });

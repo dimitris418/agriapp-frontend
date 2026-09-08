@@ -68,6 +68,21 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let farmer" class="actions">
+        @if (farmer.isActive) {
+          <button matIconButton (click)="toggleStatus(farmer)" matTooltip="Απενεργοποίηση">
+            <mat-icon>block</mat-icon>
+          </button>
+        } @else {
+          <button matIconButton (click)="toggleStatus(farmer)" matTooltip="Επαναφορά">
+            <mat-icon>restore</mat-icon>
+          </button>
+        }
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
     <tr mat-row *matRowDef="let row; columns: columns"></tr>
   </table>

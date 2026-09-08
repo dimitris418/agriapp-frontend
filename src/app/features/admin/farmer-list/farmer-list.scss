@@ -50,6 +50,11 @@ table {
   color: var(--mat-sys-on-surface-variant);
 }
 
+.actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
 .empty {
   padding: 2rem 1rem;
   margin: 0;
