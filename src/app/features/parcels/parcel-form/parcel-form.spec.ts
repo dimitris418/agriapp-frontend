@@ -40,9 +40,10 @@ describe('ParcelForm', () => {
     fixture = TestBed.createComponent(ParcelForm);
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
+    httpMock.expectOne((req) => req.url.endsWith('/regional-units')).flush([]);
     await fixture.whenStable();
 
-    fill({ name: 'Κάτω χωράφι', location: 'Λάρισα', areaInStremmas: '25.5', kaek: '' });
+    fill({ name: 'Κάτω χωράφι', areaInStremmas: '25.5', kaek: '' });
     await fixture.whenStable();
     fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
 
@@ -59,12 +60,13 @@ describe('ParcelForm', () => {
     fixture = TestBed.createComponent(ParcelForm);
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
+    httpMock.expectOne((req) => req.url.endsWith('/regional-units')).flush([]);
 
     httpMock.expectOne((req) => req.url.endsWith('/parcels/a1')).flush({
       id: 1,
       uuid: 'a1',
       name: 'Κάτω χωράφι',
-      location: 'Λάρισα',
+      regionalUnitReadOnlyDTO: null,
       areaInStremmas: 25.5,
       kaek: null,
       isActive: true,
@@ -80,6 +82,7 @@ describe('ParcelForm', () => {
     fixture = TestBed.createComponent(ParcelForm);
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
+    httpMock.expectOne((req) => req.url.endsWith('/regional-units')).flush([]);
     await fixture.whenStable();
 
     fill({ name: 'Κάτω χωράφι', areaInStremmas: '25.5', kaek: '123' });

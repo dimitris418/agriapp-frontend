@@ -24,8 +24,17 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Τοποθεσία</mat-label>
-            <input matInput formControlName="location" placeholder="Λάρισα" />
+            <mat-label>Περιφερειακή ενότητα</mat-label>
+            <mat-select formControlName="regionalUnitId">
+              <mat-option [value]="null">—</mat-option>
+              @for (group of groupedUnits(); track group.region) {
+                <mat-optgroup [label]="group.region">
+                  @for (unit of group.units; track unit.id) {
+                    <mat-option [value]="unit.id">{{ unit.name }}</mat-option>
+                  }
+                </mat-optgroup>
+              }
+            </mat-select>
             <mat-hint>Προαιρετικό</mat-hint>
           </mat-form-field>
 
