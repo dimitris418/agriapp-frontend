@@ -3,7 +3,12 @@ import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Paginated } from '../models/api.model';
-import { FarmerFilters, FarmerReadOnlyDTO, FarmerUpdateDTO } from '../models/farmer.model';
+import {
+  FarmerFilters,
+  FarmerReadOnlyDTO,
+  FarmerStatusUpdateDTO,
+  FarmerUpdateDTO,
+} from '../models/farmer.model';
 
 @Service()
 export class Farmer {
@@ -16,6 +21,12 @@ export class Farmer {
 
   updateMe(dto: FarmerUpdateDTO): Observable<FarmerReadOnlyDTO> {
     return this.http.put<FarmerReadOnlyDTO>(`${this.url}/me`, dto);
+  }
+
+  // Λογική διαγραφή και επαναφορά, από τον διαχειριστή.
+  setStatus(uuid: string, isActive: boolean): Observable<FarmerReadOnlyDTO> {
+    const body: FarmerStatusUpdateDTO = { isActive };
+    return this.http.patch<FarmerReadOnlyDTO>(`${this.url}/${uuid}/status`, body);
   }
 
   // Διαχειριστική λίστα: το back-end απαιτεί MANAGE_USERS.

@@ -32,3 +32,7 @@ export interface FarmerFilters extends GenericFilters {
   registryNumber?: string;
   active?: boolean;
 }
+
+export interface FarmerStatusUpdateDTO {
+  isActive: boolean;
+}

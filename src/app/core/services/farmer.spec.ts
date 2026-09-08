@@ -34,4 +34,13 @@ describe('Farmer', () => {
     expect(request.request.method).toBe('GET');
     request.flush({});
   });
+
+  it('should patch the status of a farmer', () => {
+    service.setStatus('f1', false).subscribe();
+
+    const request = httpMock.expectOne((req) => req.url.endsWith('/farmers/f1/status'));
+    expect(request.request.method).toBe('PATCH');
+    expect(request.request.body).toEqual({ isActive: false });
+    request.flush({});
+  });
 });
