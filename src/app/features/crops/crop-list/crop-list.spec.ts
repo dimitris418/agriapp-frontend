@@ -13,7 +13,7 @@ const page = {
         id: 1,
         uuid: 'p1',
         name: 'Κάτω χωράφι',
-        location: 'Λάρισα',
+        regionalUnitReadOnlyDTO: null,
         areaInStremmas: 25.5,
         kaek: null,
         isActive: true,
