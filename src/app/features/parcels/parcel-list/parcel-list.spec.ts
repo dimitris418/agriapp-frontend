@@ -10,7 +10,11 @@ const page = {
       id: 1,
       uuid: 'a1',
       name: 'Κάτω χωράφι',
-      location: 'Λάρισα',
+      regionalUnitReadOnlyDTO: {
+        id: 23,
+        name: 'Λάρισας',
+        regionReadOnlyDTO: { id: 5, name: 'Θεσσαλία' },
+      },
       areaInStremmas: 25.5,
       kaek: null,
       isActive: true,
@@ -19,7 +23,7 @@ const page = {
       id: 2,
       uuid: 'a2',
       name: 'Πάνω χωράφι',
-      location: null,
+      regionalUnitReadOnlyDTO: null,
       areaInStremmas: 12,
       kaek: '123456789012',
       isActive: false,
@@ -47,17 +51,23 @@ describe('ParcelList', () => {
     fixture.detectChanges();
   });
 
+  const flushInitialRequests = (body: object = page) => {
+    httpMock.expectOne((req) => req.url.endsWith('/regional-units')).flush([]);
+    httpMock.expectOne((req) => req.url.endsWith('/parcels')).flush(body);
+  };
+
   it('should render a row per parcel', async () => {
-    httpMock.expectOne((req) => req.url.endsWith('/parcels')).flush(page);
+    flushInitialRequests();
     await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelectorAll('tbody tr').length).toBe(2);
     expect(fixture.nativeElement.textContent).toContain('Κάτω χωράφι');
+    expect(fixture.nativeElement.textContent).toContain('Θεσσαλία');
     httpMock.verify();
   });
 
-  it('should show a dash where the location is missing', async () => {
-    httpMock.expectOne((req) => req.url.endsWith('/parcels')).flush(page);
+  it('should show a dash where the regional unit is missing', async () => {
+    flushInitialRequests();
     await fixture.whenStable();
 
     expect(fixture.nativeElement.textContent).toContain('—');
@@ -65,9 +75,7 @@ describe('ParcelList', () => {
   });
 
   it('should show an empty message when there is nothing to list', async () => {
-    httpMock
-      .expectOne((req) => req.url.endsWith('/parcels'))
-      .flush({ ...page, data: [], numberOfElements: 0, totalElements: 0 });
+    flushInitialRequests({ ...page, data: [], numberOfElements: 0, totalElements: 0 });
     await fixture.whenStable();
 
     expect(fixture.nativeElement.textContent).toContain('Δεν βρέθηκαν αγροτεμάχια');

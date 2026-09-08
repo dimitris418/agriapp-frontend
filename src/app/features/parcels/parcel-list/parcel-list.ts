@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,7 +16,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { debounceTime } from 'rxjs';
+import { RegionalUnitReadOnlyDTO } from '../../../core/models/lookup.model';
 import { ParcelFilters, ParcelReadOnlyDTO } from '../../../core/models/parcel.model';
+import { Lookup } from '../../../core/services/lookup';
 import { Parcel } from '../../../core/services/parcel';
 import { ConfirmDialog, ConfirmDialogData } from '../../../shared/confirm-dialog/confirm-dialog';
 
@@ -44,18 +46,36 @@ import { ConfirmDialog, ConfirmDialogData } from '../../../shared/confirm-dialog
 })
 export class ParcelList implements OnInit {
   private readonly parcels = inject(Parcel);
+  private readonly lookup = inject(Lookup);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly formBuilder = inject(FormBuilder);
 
-  protected readonly columns = ['name', 'location', 'areaInStremmas', 'kaek', 'isActive', 'actions'];
+  protected readonly columns = [
+    'name',
+    'regionalUnit',
+    'areaInStremmas',
+    'kaek',
+    'isActive',
+    'actions',
+  ];
   protected readonly rows = signal<ParcelReadOnlyDTO[]>([]);
   protected readonly total = signal(0);
   protected readonly loading = signal(false);
+  protected readonly regionalUnits = signal<RegionalUnitReadOnlyDTO[]>([]);
+
+  protected readonly groupedUnits = computed(() => {
+    const groups = new Map<string, RegionalUnitReadOnlyDTO[]>();
+    for (const unit of this.regionalUnits()) {
+      const region = unit.regionReadOnlyDTO.name;
+      groups.set(region, [...(groups.get(region) ?? []), unit]);
+    }
+    return [...groups.entries()].map(([region, units]) => ({ region, units }));
+  });
 
   protected readonly filterForm = this.formBuilder.nonNullable.group({
     name: [''],
-    location: [''],
+    regionalUnitId: [''],
     active: [''],
   });
 
@@ -76,7 +96,7 @@ export class ParcelList implements OnInit {
           ...this.filters,
           page: 0,
           name: value.name || undefined,
-          location: value.location || undefined,
+          regionalUnitId: value.regionalUnitId ? Number(value.regionalUnitId) : undefined,
           active: value.active === '' ? undefined : value.active === 'true',
         };
         this.load();
@@ -84,6 +104,7 @@ export class ParcelList implements OnInit {
   }
 
   ngOnInit(): void {
+    this.lookup.getRegionalUnits().subscribe((units) => this.regionalUnits.set(units));
     this.load();
   }
 

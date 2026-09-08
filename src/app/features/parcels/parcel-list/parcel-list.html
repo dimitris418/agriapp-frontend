@@ -14,9 +14,17 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Τοποθεσία</mat-label>
-    <input matInput formControlName="location" placeholder="Λάρισα" />
-    <mat-icon matSuffix>place</mat-icon>
+    <mat-label>Περιφερειακή ενότητα</mat-label>
+    <mat-select formControlName="regionalUnitId">
+      <mat-option value="">Όλες</mat-option>
+      @for (group of groupedUnits(); track group.region) {
+        <mat-optgroup [label]="group.region">
+          @for (unit of group.units; track unit.id) {
+            <mat-option [value]="unit.id">{{ unit.name }}</mat-option>
+          }
+        </mat-optgroup>
+      }
+    </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -40,9 +48,18 @@
       <td mat-cell *matCellDef="let parcel">{{ parcel.name }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="location">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="location">Τοποθεσία</th>
-      <td mat-cell *matCellDef="let parcel">{{ parcel.location || '—' }}</td>
+    <ng-container matColumnDef="regionalUnit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="regionalUnit.name">Τοποθεσία</th>
+      <td mat-cell *matCellDef="let parcel">
+        @if (parcel.regionalUnitReadOnlyDTO; as unit) {
+          <div class="unit">
+            <span>{{ unit.name }}</span>
+            <small>{{ unit.regionReadOnlyDTO.name }}</small>
+          </div>
+        } @else {
+          —
+        }
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="areaInStremmas">
